@@ -1,0 +1,3 @@
+[submodule "spim-timingmodel"]
+	path = spim-timingmodel
+	url = https://github.com/leepoly/spim-timingmodel
