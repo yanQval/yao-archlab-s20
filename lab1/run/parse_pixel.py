@@ -3,7 +3,7 @@ import numpy as np
 import sys
 
 if len(sys.argv) < 2:
-    print('Usage output.py output.pixel [output.img]')
+    print('Usage %s output.pixel [output.img]' % (sys.argv[0]))
     sys.exit(0)
 
 file = open(sys.argv[1], "r")

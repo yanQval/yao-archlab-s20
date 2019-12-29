@@ -1,6 +1,6 @@
 from PIL import Image
 import sys
-if len(sys.argv)<2:
+if len(sys.argv)<3:
     print('Usage: python3 %s input.img output.pixel' % (sys.argv[0]))
     sys.exit()
 

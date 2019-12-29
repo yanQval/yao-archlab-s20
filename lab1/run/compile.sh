@@ -1,6 +1,6 @@
 set -e
 # do compiling
-../mips-gcc -Werror -std=c99 -march=mips32 -mabi=32 -mno-explicit-relocs -mno-split-addresses -S -O0 $1.c -o $1.S &&
+./mips-linux-gnu-gcc -Werror -std=c99 -march=mips32 -mabi=32 -mno-explicit-relocs -mno-split-addresses -S -O0 $1.c -o $1.S &&
 
 # modify assembly code
 sed -i '/^.\.ident/d' $1.S
