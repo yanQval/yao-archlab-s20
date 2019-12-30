@@ -2,7 +2,7 @@ Lab1 Assembly Lab
 ===
 
 ## Overview of this lab
-Before starting this lab, you are supposed to equip with the following:
+Before starting this lab, you are supposed to be equipped with the following:
 
 - A laptop with native Linux OS/WSL-based Win10 (refer to WSL setup instructions)/Linux VPS access
 - Basic Linux operation (refer to Linux cheetsheet)
@@ -23,23 +23,34 @@ After this lab, you will understand following:
 During this lab, you are suggested to refer to the following materials:
 
 - Linux cheetsheet
+
     http://cheatsheetworld.com/programming/unix-linux-cheat-sheet/
+
 - WSL setup instructions
+
     https://docs.microsoft.com/en-us/windows/wsl/install-win10
+
 - Image Convolution & Gauss Smooth Filter
+
     https://en.wikipedia.org/wiki/Kernel_(image_processing)
+
     https://homepages.inf.ed.ac.uk/rbf/HIPR2/gsmooth.htm
+
 - Code optimization
+
     https://en.wikipedia.org/wiki/Loop_nest_optimization
+
     https://www.agner.org/optimize/optimizing_assembly.pdf
+
 - syscalls defined by SPIM
+
     http://students.cs.tamu.edu/tanzir/csce350/reference/syscalls.html
 
 
 
 ## Task Requirement
 
-Given a original image `gauss.jpg`, try a gaussian-like smoothing to generate a blurred image `blurred-gauss.jpg`. Implement a **C version** and a **MIPS assembly version** to achieve this. Test the correctness and compare the performance of both your programs, under different timing models.
+Given an original image `gauss.jpg`, try a gaussian-like smoothing to generate a blurred image `blurred-gauss.jpg`. Implement a **C version** and a **MIPS assembly version** to achieve this. Test the correctness and compare the performance of both your programs, under different timing models.
 
 
 
@@ -70,12 +81,15 @@ Inside this repository, we provide following files:
 ## Task Instructions
 
 Figure 1 introduces the work flow in lab1.
+
 [Blank]
 
 Figure 2 shows our three timing models.
+
 [Blank]
 
-0. Set up whole environment.
+### Set up whole environment.
+
    `git clone https://github.com/tsinghua-ideal/yao-arch/ --recursive`
 
    `cd lab1`
@@ -111,25 +125,29 @@ Figure 2 shows our three timing models.
 
    You will see `7` on the screen, along with instruction statistics of that code segment.
 
-1. Generate pixel file
+### Generate pixel file
 
-  Just type:
+   Just type:
 
-  `python gen_pixel.py gauss.jpg gauss.pixel`
+   `python gen_pixel.py gauss.jpg gauss.pixel`
 
-  [note] If you encounter error with lib missing, you can either install it or just use pixel file `gauss.pixel` provided in sample/ folder.
+   [note] If you encounter error with lib missing, you can either install it or just use pixel file `gauss.pixel` provided in `sample/` folder.
 
-  [note] The `pixelfile` format:
+   [question] `ImportError: No module named Image`!
 
-  N M # for first line, height and width of image
+   `python -m pip install pillow numpy --user`
 
-  pi ... # for next N lines, M numbers each line, representing grayscale of pixel: 0-255
+   [note] The `pixelfile` format:
+
+   N M # for first line, height and width of image
+
+   pi ... # for next N lines, M numbers each line, representing grayscale of pixel: 0-255
 
   
 
-2. Write gauss-like filter
+### Write gaussian-like filter
 
-   There are many existed algorithm for image smoothing. Most of them apply convolution operation to image. We propose a gauss-like image filter which has a 3*3 kernel matrix K:
+   There are many existing algorithm for image smoothing. Most of them apply convolution operation to image. We propose a gauss-like image filter which has a 3\*3 kernel matrix K:
 
    1 2 1
 
@@ -139,9 +157,10 @@ Figure 2 shows our three timing models.
 
    Apply convolution (element-wise multiplication) of K and each pixel to a new P', normalize the result to 1/16 and make sure the value of P falls in [0, 255].
 
-   $$P' = max(min(\frac{1}{16}(P*K)(1,1), 255), 0), \forall P \in img$$
+   `$$P' = max(min(\frac{1}{16}(P*K)(1,1), 255), 0), \forall P \in img$$`
 
    Assume your `lab1-c.c`, `lab1-mips.S` and their output `gauss-c.pixel`, `gauss-mips.pixel` respectively.
+
    [hint] You may compile it use your native gcc compiler. For checking its correctness, `python parse_pixel.py gauss-c.pixel`
 
    `./compile.sh lab1-c`
@@ -152,23 +171,25 @@ Figure 2 shows our three timing models.
 
    [Question] My C program works fine on x86. Why I can't emulate it under MIPS?
 
-- SPIM emulator provides its own interface for input/output. We should use the IO syscall that SPIM defines. For C program I have written a simple header called `mystdio.h`. Check the code for its usage!
+- SPIM emulator provides its own interface for input/output. We should use the IO syscall that SPIM defines. For C program TA has prepared a simple header called `mystdio.h`. Check the code for its usage!
+
 Modify your code by:
 - Adding a header `+ #include "mystdio.h"`
 - Removing standard IO header: `- #include <stdio.h>`
 - Removing all file-related IO functions: `fopen`, `fclose`, ...
 - Directing all read and write to stdio and identify their data type: `fscanf/scanf` -> `scanf_num`, `fprintf/printf` -> `printf_char`
 
-- There is some inconsistency between MIPS cross compiler and SPIM emulator. Correct your code by:
-- Use global variable for large memory allocation. Set initial value for every global variable.
-- In MIPS file, make sure all global data segment have `.data` header.
-- Contact TA if you find more errors.
+Also, there is some inconsistency between MIPS cross compiler and SPIM emulator. Correct your code by:
+- Using global variable for large memory allocation. Set initial value for every global variable.
+- In MIPS file, making sure all global data segment have `.data` header.
+- Contacting TA if you find more errors.
 
 
 
-3. Emulate and optimize your program
+### Emulate and optimize your program
 
    `./spim -lab1-rel gauss.pixel gauss-c.pixel file lab1-c.S`
+
    Try to eliminate unnecessary cycles. You may notice large overhead is from memory access. Try to avoid it by reusing as many registers as possible for kernel access.
 
    For common code optimization:
@@ -181,30 +202,30 @@ Modify your code by:
 
 - One of a common loop optimization technique is called loop blocking. For more information, refer to the wiki at the top.
 
-  Typical unoptimized program results:
+  Unoptimized results, for reference:
 
   C version
 
-  ​    statistics of instructions
+    statistics of instructions
 
-  ​    branch inst.             #3130569        estimated cycle 8918748
+    branch inst.             #3130569        estimated cycle 8918748
 
-  ​    memory inst.             #30298157       estimated cycle 3029815700
+    memory inst.             #30298157       estimated cycle 3029815700
 
-  ​    register inst.           #76035488       estimated cycle 380177440
+    register inst.           #76035488       estimated cycle 380177440
 
-  ​    total                   #109464214      estimated cycle 3418911888
+    total                   #109464214      estimated cycle 3418911888
 
   
 
   MIPS version
       branch inst.             #2815957        estimated cycle 7974914
 
-  ​    memory inst.             #3277189        estimated cycle 327718900
+      memory inst.             #3277189        estimated cycle 327718900
 
-  ​    register inst.           #16564604       estimated cycle 82823020
+      register inst.           #16564604       estimated cycle 82823020
 
-  ​    total                   #22657750       estimated cycle 418516834
+      total                   #22657750       estimated cycle 418516834
 
   
 
@@ -222,7 +243,7 @@ Modify your code by:
     | Multicycle pipelining core, without bypass |                   |             |
     | Multicycle pipelining core, with bypass    |                   |             |
     
-- Answer following question
+- Answer following questions:
   
     - Why is your MIPS program better/worse than your C version?
     - Describe the code optimizations you have used to improve the performance of your implementation. Explain why it helps increase the IPC.
@@ -236,7 +257,8 @@ Plagiarism is **strictly** forbidden in this lab. Peer discussion is **not** sug
 
 ### Correctness
 
-TA emulates your program to generate a output pixel file. Then TA compares it with a pre-processed golden pixel file. More matches mean higher correctness score. Note that we will use different input image pairs for grading!
+TA emulates your program to generate an output pixel file. Then TA compares it with a pre-processed golden pixel file. More matches mean higher correctness score. Note that we will use different input image pairs for grading!
+
 ### Performance
 
 Output of SPIM total cycle.

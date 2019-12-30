@@ -1,4 +1,7 @@
-from PIL import Image
+try:
+    from PIL import Image
+except ImportError:
+    import Image
 import sys
 if len(sys.argv)<3:
     print('Usage: python3 %s input.img output.pixel' % (sys.argv[0]))
