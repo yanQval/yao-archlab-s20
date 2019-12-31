@@ -113,6 +113,7 @@ Figure 2 shows our three timing models.
    Now you have setup lab1 environment successfully.
 
    Now test a simple add program:
+   
    `cd run`
 
    `./compile.sh simple_add # compile C file into MIPS assembly code`
@@ -204,32 +205,22 @@ Also, there is some inconsistency between MIPS cross compiler and SPIM emulator.
 
   Unoptimized results, for reference:
 
+  ```
   C version
-
-    statistics of instructions
-
     branch inst.             #3130569        estimated cycle 8918748
-
     memory inst.             #30298157       estimated cycle 3029815700
-
     register inst.           #76035488       estimated cycle 380177440
-
-    total                   #109464214      estimated cycle 3418911888
-
+  total                   #109464214      estimated cycle 3418911888
   
-
   MIPS version
-      branch inst.             #2815957        estimated cycle 7974914
-
-      memory inst.             #3277189        estimated cycle 327718900
-
-      register inst.           #16564604       estimated cycle 82823020
-
-      total                   #22657750       estimated cycle 418516834
-
+    branch inst.             #2815957        estimated cycle 7974914
+    memory inst.             #3277189        estimated cycle 327718900
+    register inst.           #16564604       estimated cycle 82823020
+  total                   #22657750       estimated cycle 418516834
+  ```
   
 
-4. Finish writing your design document and following documents
+### Finish writing your design document and following documents
 
 - Design document
   
