@@ -90,7 +90,7 @@ Figure 2 shows our three timing models.
 
 ### Set up whole environment.
 
-   `git clone https://github.com/tsinghua-ideal/yao-arch/ --recursive`
+   `git clone https://github.com/tsinghua-ideal/yao-archlab-s20/ --recursive`
 
    `cd lab1`
 
@@ -150,11 +150,11 @@ Figure 2 shows our three timing models.
 
    There are many existing algorithm for image smoothing. Most of them apply convolution operation to image. We propose a gauss-like image filter which has a 3\*3 kernel matrix K:
 
+```
    1 2 1
-
    2 4 2
-
    1 2 1
+```
 
    Apply convolution (element-wise multiplication) of K and each pixel to a new P', normalize the result to 1/16 and make sure the value of P falls in [0, 255].
 
@@ -168,7 +168,7 @@ Figure 2 shows our three timing models.
 
    `./spim -lab1-dev file lab1-c.S`
 
-   For simplicity, TA provides a simple MIPS and C starter file. Fill in all TODOs.
+   For simplicity, TA provides a simple MIPS and C starter file. Complete all TODOs.
 
    [Question] My C program works fine on x86. Why I can't emulate it under MIPS?
 
@@ -210,13 +210,13 @@ Also, there is some inconsistency between MIPS cross compiler and SPIM emulator.
     branch inst.             #3130569        estimated cycle 8918748
     memory inst.             #30298157       estimated cycle 3029815700
     register inst.           #76035488       estimated cycle 380177440
-  total                   #109464214      estimated cycle 3418911888
+    total                   #109464214      estimated cycle 3418911888
   
   MIPS version
     branch inst.             #2815957        estimated cycle 7974914
     memory inst.             #3277189        estimated cycle 327718900
     register inst.           #16564604       estimated cycle 82823020
-  total                   #22657750       estimated cycle 418516834
+    total                   #22657750       estimated cycle 418516834
   ```
   
 
@@ -248,10 +248,10 @@ Plagiarism is **strictly** forbidden in this lab. Peer discussion is **not** sug
 
 ### Correctness
 
-TA emulates your program to generate an output pixel file. Then TA compares it with a pre-processed golden pixel file. More matches mean higher correctness score. Note that we will use different input image pairs for grading!
+TA emulates your program to generate an output pixel file. Then TA compares it with a pre-processed gold standard. More matches mean higher correctness score. Note that we will use different image pairs for grading!
 
 ### Performance
 
 Output of SPIM total cycle.
 
-Overall Grade = f(Correctness, -Performance), f is monotonically increasing.
+Overall Grade = $f(Correctness, -Performance)$, $f$ is monotonically increasing.
