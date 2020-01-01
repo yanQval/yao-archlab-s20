@@ -90,7 +90,7 @@ Figure 2 shows our three timing models.
 
 ### Set up whole environment.
 
-   `git clone https://github.com/tsinghua-ideal/yao-archlab-s20/ --recursive`
+   `git clone https://github.com/tsinghua-ideal/yao-archlab-s20/ --depth 1 --recursive`
 
    `cd lab1`
 
