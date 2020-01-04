@@ -39,6 +39,7 @@ void ImageOutput() {
 int main() {
     n = _scanf_num();
     m = _scanf_num();
+    // TODO: read all pixels to img[][]
 
     ImageProcess();
 

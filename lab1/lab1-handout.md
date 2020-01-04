@@ -14,7 +14,7 @@ Before starting this lab, you are supposed to be equipped with the following:
 After this lab, you will understand following:
 
 - Conception of image processing, particularly smooth filter
-- Conception of cross-compiling and emulating, especially SPIM, a MIPS emulator
+- Conception of emulating, especially SPIM, a MIPS emulator
 - Conception of several timing models, particularly simple 5-stage pipelining CPU model
 - Conception of code optimization and simple performance statistical analysis of your own program
 
@@ -35,6 +35,12 @@ During this lab, you are suggested to refer to the following materials:
     https://en.wikipedia.org/wiki/Kernel_(image_processing)
 
     https://homepages.inf.ed.ac.uk/rbf/HIPR2/gsmooth.htm
+
+- MIPS32 ISA Quick Reference
+
+    https://s3-eu-west-1.amazonaws.com/downloads-mips/documents/MD00565-2B-MIPS32-QRC-01.01.pdf
+
+    More documents: https://www.mips.com/products/architectures/mips32-2/
 
 - Code optimization
 
@@ -98,7 +104,7 @@ Figure 2 shows our three timing models.
 
    `wget http://ftp.loongnix.org/toolchain/gcc/release/mips-loongson-gcc7.3-2019.06-29-linux-gnu.tar.gz`
 
-   `tar xvf mips-loongson-gcc7.3-2019.06-29-linux-gnu.tar.gz # unzip mips compiler`
+   `tar xvf mips-loongson-gcc7.3-2019.06-29-linux-gnu.tar.gz # unzip mips cross-compiler`
 
    `ln -sf $LAB1/mips-loongson-gcc7.3-linux-gnu/2019.06-29/bin/mips-linux-gnu-gcc ./run/ # create a shortcut for compiler`
 
@@ -162,11 +168,13 @@ Figure 2 shows our three timing models.
 
    Assume your `lab1-c.c`, `lab1-mips.S` and their output `gauss-c.pixel`, `gauss-mips.pixel` respectively.
 
-   [hint] You may compile it use your native gcc compiler. For checking its correctness, `python parse_pixel.py gauss-c.pixel`
+   [hint] You may compile it use your native gcc compiler. To check its correctness, `python parse_pixel.py gauss-c.pixel`
 
    `./compile.sh lab1-c`
 
    `./spim -lab1-dev file lab1-c.S`
+
+   Lab1 supports 2 modes of spim-timingmodel (spim-t). In developing mode execution trace is demonstrated. `stdin`/`stdout` is used. You can test it with small input cases. In release mode execution trace is hidden and all IOs are directed from/to specified files: `./spim -lab1-rel inputfile outputfile file assembly.S`
 
    For simplicity, TA provides a simple MIPS and C starter file. Complete all TODOs.
 
@@ -175,17 +183,17 @@ Figure 2 shows our three timing models.
 - SPIM emulator provides its own interface for input/output. We should use the IO syscall that SPIM defines. For C program TA has prepared a simple header called `mystdio.h`. Check the code for its usage!
 
 Modify your code by:
+
 - Adding a header `+ #include "mystdio.h"`
 - Removing standard IO header: `- #include <stdio.h>`
 - Removing all file-related IO functions: `fopen`, `fclose`, ...
 - Directing all read and write to stdio and identify their data type: `fscanf/scanf` -> `scanf_num`, `fprintf/printf` -> `printf_char`
 
 Also, there is some inconsistency between MIPS cross compiler and SPIM emulator. Correct your code by:
+
 - Using global variable for large memory allocation. Set initial value for every global variable.
 - In MIPS file, making sure all global data segment have `.data` header.
 - Contacting TA if you find more errors.
-
-
 
 ### Emulate and optimize your program
 
@@ -203,20 +211,20 @@ Also, there is some inconsistency between MIPS cross compiler and SPIM emulator.
 
 - One of a common loop optimization technique is called loop blocking. For more information, refer to the wiki at the top.
 
-  Unoptimized results, for reference:
+  Unoptimized results, for reference (multicycle pipelined core with bypassing):
 
   ```
   C version
     branch inst.             #3130569        estimated cycle 8918748
     memory inst.             #30298157       estimated cycle 3029815700
     register inst.           #76035488       estimated cycle 380177440
-    total                   #109464214      estimated cycle 3418911888
+    total                    #109464214      estimated cycle 3418911888
   
   MIPS version
-    branch inst.             #2815957        estimated cycle 7974914
-    memory inst.             #3277189        estimated cycle 327718900
-    register inst.           #16564604       estimated cycle 82823020
-    total                   #22657750       estimated cycle 418516834
+    branch inst.            #7974914        estimated cycle 7974914
+    memory inst.            #3277189        estimated cycle 491578350
+    register inst.          #16564604       estimated cycle 16564604
+    total                   #22657750       estimated cycle 516117868
   ```
   
 
@@ -228,11 +236,11 @@ Also, there is some inconsistency between MIPS cross compiler and SPIM emulator.
     
 - Record performance of your algorithm
   
-    | Timing Module                              | Instruction Count | Cycle Count |
-    | ------------------------------------------ | ----------------- | ----------- |
-    | Multicycle non-pipelining core             |                   |             |
-    | Multicycle pipelining core, without bypass |                   |             |
-    | Multicycle pipelining core, with bypass    |                   |             |
+    | Timing Module                                | Instruction Count | Cycle Count |
+    | ------------------------------------------   | ----------------- | ----------- |
+    | Multicycle non-pipelined core                |                   |             |
+    | Multicycle pipelined core, without bypassing |                   |             |
+    | Multicycle pipelined core, with bypassing    |                   |             |
     
 - Answer following questions:
   
