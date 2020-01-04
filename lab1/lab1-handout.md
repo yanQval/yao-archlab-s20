@@ -62,7 +62,7 @@ Inside this repository, we provide following files:
 
 <font face="Consolas">|-run --- Our workspace folder</font>
 
-<font face="Consolas">|-gen_pixel.py --- Convert an image into pixel file</font>
+<font face="Consolas">    |-gen_pixel.py --- Convert an image into pixel file</font>
 
 <font face="Consolas">    |-parse_pixel.py --- Convert a pixelfile into image</font>
 
