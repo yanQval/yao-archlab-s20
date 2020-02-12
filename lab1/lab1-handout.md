@@ -96,9 +96,13 @@ Figure 2 shows our three timing models.
 
 ### Set up whole environment.
 
-   `git clone https://github.com/tsinghua-ideal/yao-archlab-s20/ --depth 1 --recursive`
+   `git clone https://github.com/tsinghua-ideal/yao-archlab-s20/ --depth 1 --recursive && cd yao-archlab-s20`
 
-   `cd lab1`
+   `cd spim-timingmodel`
+
+   `git checkout b92211`
+
+   `cd ../lab1`
 
    `export LAB1=$PWD`
 

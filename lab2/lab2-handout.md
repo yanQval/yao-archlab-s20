@@ -54,7 +54,7 @@ Inside this repository, we provide following files:
 
 Figure 1 introduces the 5 stages in their in-order processor design.
 
-[Blank]
+![Image of 5 stage timing core](./5-stage-timing-core.png)
 
 According to their design, the emperor has trained five troops, in charge of instruction fetching, decoding, executing, memory and regfile accessing. But soon they realize a practical problem: soldiers are too far away to receive neighboring signal, thus a global clock is impossible to be implemented at all. After careful thought, Wang comes up an idea: a global scheduler, instead of global clock should be set and operated by emperor, to guide all events in the order of their timestamp. Therefore a complete instruction can be organized as five timing events, correspondingly going through each stage (timing component).
 
@@ -65,6 +65,8 @@ We have provided a naive processor framework which can only execute `addiu`, `ja
 - Finish all related instruction types from your lab1 program. (Both C version and MIPS version are acceptable)
 - Handle Read-After-Write data dependency correctly.
 - Complete a design document (save it for thousands of your offsprings).
+
+Under spim-timingmodel repo, type `git checkout 263098` to activate this framework.
 
 ### Suggestions from Wang Miao
 
